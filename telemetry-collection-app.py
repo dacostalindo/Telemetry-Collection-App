@@ -7,10 +7,11 @@ import sys
 
 def main():
 
+    UDP_IP = "127.0.0.1"
+    UDP_PORT = 5007
+
     parser = argparse.ArgumentParser()
-
     parser.add_argument('--config', '-c')
-
     args = parser.parse_args()
 
     if args.config is not None:

@@ -75,23 +75,23 @@ def main():
     else:
         SERVICES = app_api.Services()
 
-    request = '{ ping }'
-
-    try:
-        response = SERVICES.query(service="monitor-service", query=request)
-
-        data = response["ping"]
-
-        if data == "pong":
-            print("Successfully pinged monitor service")
-            status = "Okay"
-        else:
-            print("Unexpected monitor service response: %s" % data)
-            status = "Unexpected"
-
-    except Exception as e:
-        print("Something went wrong: " + str(e))
-        status = "Error"
+    # request = '{ ping }'
+    #
+    # try:
+    #     response = SERVICES.query(service="monitor-service", query=request)
+    #
+    #     data = response["ping"]
+    #
+    #     if data == "pong":
+    #         print("Successfully pinged monitor service")
+    #         status = "Okay"
+    #     else:
+    #         print("Unexpected monitor service response: %s" % data)
+    #         status = "Unexpected"
+    #
+    # except Exception as e:
+    #     print("Something went wrong: " + str(e))
+    #     status = "Error"
 
     imu_data = read_telemetry(UDP_IP, UDP_PORT)
     rx = imu_data['r_x']

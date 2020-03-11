@@ -2,6 +2,7 @@
 
 import argparse
 import app_api
+import imu_api
 import sys
 
 def main():
@@ -19,46 +20,48 @@ def main():
 
     request = '{ ping }'
 
-    try:
-        response = SERVICES.query(service="monitor-service", query=request)
+    # try:
+    #     response = SERVICES.query(service="monitor-service", query=request)
+    #
+    #     data = response["ping"]
+    #
+    #     if data == "pong":
+    #         print("Successfully pinged monitor service")
+    #         status = "Okay"
+    #     else:
+    #         print("Unexpected monitor service response: %s" % data)
+    #         status = "Unexpected"
+    #
+    # except Exception as e:
+    #     print("Something went wrong: " + str(e))
+    #     status = "Error"
+    self.imu = imu_api.IMU(ip=UDP_IP,port=UDP_PORT)
+    data = self.imu.read_telemetry()
 
-        data = response["ping"]
+    # request = '''
+    #     mutation {
+    #         insert(subsystem: "OBC", parameter: "status", value: "%s") {
+    #             success,
+    #             errors
+    #         }
+    #     }
+    #     ''' % (status)
 
-        if data == "pong":
-            print("Successfully pinged monitor service")
-            status = "Okay"
-        else:
-            print("Unexpected monitor service response: %s" % data)
-            status = "Unexpected"
-
-    except Exception as e:
-        print("Something went wrong: " + str(e))
-        status = "Error"
-
-    request = '''
-        mutation {
-            insert(subsystem: "OBC", parameter: "status", value: "%s") {
-                success,
-                errors
-            }
-        }
-        ''' % (status)
-
-    try:
-        response = SERVICES.query(service="telemetry-service", query=request)
-    except Exception as e:
-        print("Something went wrong: " + str(e) )
-        sys.exit(1)
-
-    data = response["insert"]
-    success = data["success"]
-    errors = data["errors"]
-
-    if success == False:
-        print("Telemetry insert encountered errors: " + str(errors))
-        sys.exit(1)
-    else:
-        print("Telemetry insert completed successfully")
+    # try:
+    #     response = SERVICES.query(service="telemetry-service", query=request)
+    # except Exception as e:
+    #     print("Something went wrong: " + str(e) )
+    #     sys.exit(1)
+    #
+    # data = response["insert"]
+    # success = data["success"]
+    # errors = data["errors"]
+    #
+    # if success == False:
+    #     print("Telemetry insert encountered errors: " + str(errors))
+    #     sys.exit(1)
+    # else:
+    #     print("Telemetry insert completed successfully")
 
 if __name__ == "__main__":
     main()

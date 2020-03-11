@@ -94,7 +94,7 @@ def main():
     #     status = "Error"
 
     imu_data = read_telemetry(UDP_IP, UDP_PORT)
-    print(imu_data)
+    print(type(imu_data))
 
 
     # request = '''

@@ -37,7 +37,7 @@ def main():
     #     print("Something went wrong: " + str(e))
     #     status = "Error"
     imu_obj = imu_api.IMU(ip=UDP_IP,port=UDP_PORT)
-    data = imu_obj.imu.read_telemetry()
+    data = imu_obj.read_telemetry()
 
     # request = '''
     #     mutation {

@@ -19,7 +19,6 @@ def read_telemetry(ip, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     #sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((ip, port))
-    print("ok so far")
     output_dict = {}
     subprocess.call(["./imu","XsensIMU.cpp","XsensIMU.h","imutest.cpp","to","imu"])
     data, addr = sock.recvfrom(1024)
@@ -59,6 +58,7 @@ def read_telemetry(ip, port):
             "Number of data names doesn't match total data: " +
             len(data_array))
 
+
     return output_dict
 
 def main():
@@ -92,7 +92,9 @@ def main():
     # except Exception as e:
     #     print("Something went wrong: " + str(e))
     #     status = "Error"
+
     imu_data = read_telemetry(UDP_IP, UDP_PORT)
+    print(imu_data)
 
 
     # request = '''

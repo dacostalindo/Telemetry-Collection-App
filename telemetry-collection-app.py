@@ -2,64 +2,13 @@
 
 import argparse
 import app_api
-import binascii
-import socket
-import struct
-import time
-import subprocess
+import imu_api
 import sys
-
-def read_imu_data(ip, port):
-
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    #sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.bind((ip, port))
-    print("ok so far")
-    output_dict = {}
-    subprocess.call(["./imu","XsensIMU.cpp","XsensIMU.h","imutest.cpp","to","imu"])
-    data, addr = sock.recvfrom(1024)
-    # parsed_data = self._unpack(
-    #     parsing=input_dict['parsing'],
-    #     data=read_data['data'])
-    ax = struct.unpack('f', data[0:4])
-    ay = struct.unpack('f', data[4:8])
-    az = struct.unpack('f', data[8:12])
-    rx = struct.unpack('f', data[12:16])
-    ry = struct.unpack('f', data[16:20])
-    rz = struct.unpack('f', data[20:24])
-    #temperature
-    temp = struct.unpack('f', data[24:28])
-    #Convert to short (2 bytes)
-    # hr min sec
-    time_h = struct.unpack('H', data[28:30])
-    time_m = struct.unpack('H', data[30:32])
-    time_s = struct.unpack('H', data[32:34])
-    timestamp = time_h[0] + time_m[0]/60 + time_s[0]/3600
-
-    data_array = [ax[0], ay[0], az[0], rx[0], ry[0], rz[0], temp[0]]
-    data_strings  = ['a_x', 'a_y', 'a_z', 'r_x', 'r_y', 'r_z', 'temp']
-
-    if len(data_array) > 1:
-
-        for index in range(len(data_array)):
-            output_dict.update(
-                {data_strings[index]: {
-                'timestamp': timestamp,
-                'data': data_array[index]}})
-
-    else:
-
-        raise KeyError(
-            "Number of data names doesn't match total data: " +
-            len(data_array))
-
-    return output_dic
 
 def main():
 
     UDP_IP = "127.0.0.1"
     UDP_PORT = 5007
-
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', '-c')
@@ -87,7 +36,8 @@ def main():
     # except Exception as e:
     #     print("Something went wrong: " + str(e))
     #     status = "Error"
-    imu_data = read_imu_data(UDP_IP, UDP_PORT)
+    imu_obj = imu_api.IMU(ip=UDP_IP,port=UDP_PORT)
+    data = imu_obj.read_telemetry()
 
     # request = '''
     #     mutation {

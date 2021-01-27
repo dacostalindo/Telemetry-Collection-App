@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from setuptools import setup
 
 setup(
@@ -11,6 +13,6 @@ setup(
     packages = setuptools.find_packages(),
     python_requires='>=3.8',
     install_requires = [
-        sock, subprocess, struct,
+        'sock', 'subprocess', 'struct',
     ]
 )
